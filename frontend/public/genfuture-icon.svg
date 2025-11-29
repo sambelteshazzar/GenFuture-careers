@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GenFuture Career emblem: non-destructive, standalone SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="768" viewBox="0 0 768 768">
+  <defs>
+    <!-- Background gradient (teal to deep blue) -->
+    <radialGradient id="bgGrad" cx="50%" cy="18%" r="85%">
+      <stop offset="0%" stop-color="#36D1BF"/>
+      <stop offset="55%" stop-color="#2A7BC7"/>
+      <stop offset="100%" stop-color="#0E1D45"/>
+    </radialGradient>
+
+    <!-- Gloss highlight -->
+    <radialGradient id="glossGrad" cx="28%" cy="20%" r="35%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+
+    <!-- UI motif gradients -->
+    <linearGradient id="arrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7DD3FC"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+
+    <linearGradient id="gearGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5E7EB"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="rgba(0,0,0,0.35)"/>
+    </filter>
+
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    </filter>
+
+    <!-- Gear teeth shape (for reuse) -->
+    <rect id="tooth" x="-6" y="-36" width="12" height="24" rx="3" ry="3"/>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="384" cy="384" r="360" fill="url(#bgGrad)"/>
+
+  <!-- Soft gloss -->
+  <ellipse cx="280" cy="170" rx="180" ry="120" fill="url(#glossGrad)"/>
+
+  <!-- Outer ring subtle -->
+  <circle cx="384" cy="384" r="330" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+
+  <!-- Emblem group -->
+  <g transform="translate(0,0)" filter="url(#softShadow)">
+    <!-- Cognitive ring -->
+    <circle cx="360" cy="360" r="150" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="26"/>
+    <circle cx="360" cy="360" r="150" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="36" filter="url(#innerGlow)"/>
+
+    <!-- Gear (mind mechanism) -->
+    <g transform="translate(360,360)">
+      <!-- Teeth -->
+      <g fill="url(#gearGrad)" stroke="rgba(0,0,0,0.08)" stroke-width="1">
+        <use href="#tooth" transform="rotate(0)"/>
+        <use href="#tooth" transform="rotate(30)"/>
+        <use href="#tooth" transform="rotate(60)"/>
+        <use href="#tooth" transform="rotate(90)"/>
+        <use href="#tooth" transform="rotate(120)"/>
+        <use href="#tooth" transform="rotate(150)"/>
+        <use href="#tooth" transform="rotate(180)"/>
+        <use href="#tooth" transform="rotate(210)"/>
+        <use href="#tooth" transform="rotate(240)"/>
+        <use href="#tooth" transform="rotate(270)"/>
+        <use href="#tooth" transform="rotate(300)"/>
+        <use href="#tooth" transform="rotate(330)"/>
+      </g>
+      <!-- Hub -->
+      <circle r="56" fill="url(#gearGrad)" stroke="rgba(0,0,0,0.12)" stroke-width="2"/>
+      <circle r="20" fill="rgba(0,0,0,0.12)"/>
+    </g>
+
+    <!-- Sustainability leaf duo -->
+    <g transform="translate(405,335) rotate(-6)">
+      <path d="M0,0 C40,-18 78,-8 96,22 C84,26 62,32 44,28 C26,24 14,12 0,0 Z" fill="url(#leafGrad)" />
+      <path d="M-12,26 C18,10 52,16 64,40 C38,42 22,38 -12,26 Z" fill="url(#leafGrad)" opacity="0.85"/>
+      <!-- Veins -->
+      <path d="M8,6 L52,20" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M0,20 L40,34" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+
+    <!-- Upward growth arrow -->
+    <g transform="translate(250,420)">
+      <path d="M0,60 L120,-40 L160,-4 L220,-120" fill="none" stroke="url(#arrowGrad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Arrow head -->
+      <path d="M220,-120 L212,-90 L244,-110 Z" fill="url(#arrowGrad)"/>
+      <!-- Tech motes -->
+      <circle cx="28" cy="38" r="4" fill="#7DD3FC"/>
+      <circle cx="64" cy="10" r="3.8" fill="#93C5FD"/>
+      <circle cx="146" cy="-18" r="3.4" fill="#60A5FA"/>
+      <circle cx="188" cy="-72" r="3" fill="#38BDF8"/>
+    </g>
+
+    <!-- Minimal head silhouette (clean, geometric) -->
+    <g transform="translate(300,360)">
+      <!-- Neck -->
+      <rect x="12" y="50" width="44" height="60" rx="12" fill="rgba(255,255,255,0.85)"/>
+      <!-- Head circle clipped -->
+      <clipPath id="headClip">
+        <path d="M64,-28 C100,-28 128,0 128,36 C128,72 100,96 72,96 C48,96 36,84 30,76 C20,64 6,60 6,48 C6,38 20,34 26,28 C30,24 30,18 30,12 C30,-10 44,-28 64,-28 Z"/>
+      </clipPath>
+      <circle cx="64" cy="36" r="72" fill="rgba(255,255,255,0.9)" clip-path="url(#headClip)"/>
+      <!-- Eye hint -->
+      <circle cx="88" cy="18" r="4" fill="rgba(0,0,0,0.22)"/>
+    </g>
+  </g>
+
+  <!-- Title -->
+  <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" text-anchor="middle">
+    <text x="384" y="610" font-size="64" font-weight="800" fill="#FFFFFF" style="letter-spacing:0.5px">GenFuture</text>
+    <text x="384" y="660" font-size="34" font-weight="700" fill="#7DD3FC" style="letter-spacing:2px">CAREER</text>
+  </g>
+
+  <!-- Subtle corner spark -->
+  <g transform="translate(720,720)">
+    <path d="M0,0 L-8,-4 L-4,-8 Z" fill="rgba(255,255,255,0.55)"/>
+  </g>
+</svg>

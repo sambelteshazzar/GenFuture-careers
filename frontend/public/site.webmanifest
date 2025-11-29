@@ -1,0 +1,28 @@
+{
+    "name": "GenFuture Career",
+    "short_name": "GenFuture",
+    "description": "Professional career discovery and exploration platform.",
+    "id": "/",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#0b1220",
+    "theme_color": "#7c3aed",
+    "icons": [{
+            "src": "/icon-mono.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/vite.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "prefer_related_applications": false,
+    "lang": "en",
+    "dir": "ltr",
+    "orientation": "portrait"
+}

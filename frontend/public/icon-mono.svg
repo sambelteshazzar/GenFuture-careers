@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">GenFuture Icon — Monochrome</title>
+  <desc id="desc">Compass and guiding star in a single-color silhouette for low-ink contexts</desc>
+
+  <!-- Monochrome variant: inherits color from CSS via currentColor -->
+  <!-- No background circle/gradient to preserve single-color use on any surface -->
+
+  <!-- Guiding star -->
+  <path d="M512 300 L540 420 L660 420 L568 488 L596 608 L512 536 L428 608 L456 488 L364 420 L484 420 Z"
+        fill="currentColor"/>
+
+  <!-- Compass upward path -->
+  <path d="M320 672 Q512 420 704 672"
+        stroke="currentColor"
+        stroke-width="28"
+        stroke-linecap="round"
+        fill="none"
+        opacity="0.95"/>
+
+  <!-- Progress markers -->
+  <circle cx="432" cy="592" r="14" fill="currentColor" opacity="0.9"/>
+  <circle cx="512" cy="512" r="14" fill="currentColor" opacity="0.95"/>
+  <circle cx="592" cy="592" r="14" fill="currentColor" opacity="0.9"/>
+</svg>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">GenFuture Icon</title>
+  <desc id="desc">Compass and guiding star symbolizing navigation and achievement</desc>
+
+  <defs>
+    <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <!-- Soft shadow for depth on larger sizes; negligible at favicon scale -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/>
+      <feOffset dy="8" result="offset"/>
+      <feColorMatrix in="offset" type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0.18 0" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Inner circular field with brand gradient -->
+  <g filter="url(#softShadow)">
+    <circle cx="512" cy="512" r="448" fill="url(#brandGradient)"/>
+  </g>
+
+  <!-- Guiding star -->
+  <path d="M512 300 L540 420 L660 420 L568 488 L596 608 L512 536 L428 608 L456 488 L364 420 L484 420 Z"
+        fill="#ffffff"/>
+
+  <!-- Compass upward path -->
+  <path d="M320 672 Q512 420 704 672"
+        stroke="#ffffff"
+        stroke-width="28"
+        stroke-linecap="round"
+        fill="none"
+        opacity="0.95"/>
+
+  <!-- Progress markers -->
+  <circle cx="432" cy="592" r="14" fill="#ffffff" opacity="0.9"/>
+  <circle cx="512" cy="512" r="14" fill="#ffffff" opacity="0.95"/>
+  <circle cx="592" cy="592" r="14" fill="#ffffff" opacity="0.9"/>
+</svg>

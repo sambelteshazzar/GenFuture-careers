@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="600" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Students collaborating illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#14b8a6" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#14b8a6" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <clipPath id="rounded">
+      <rect x="0" y="0" width="900" height="600" rx="24" ry="24" />
+    </clipPath>
+    <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.15)" />
+    </pattern>
+  </defs>
+
+  <!-- Background with subtle gradient -->
+  <rect x="0" y="0" width="900" height="600" fill="url(#bg)" />
+
+  <!-- Soft overlay for youthful vibe -->
+  <rect x="0" y="0" width="900" height="600" fill="rgba(255,255,255,0.08)" />
+
+  <g clip-path="url(#rounded)">
+    <!-- Decorative dotted pattern -->
+    <rect x="0" y="0" width="900" height="600" fill="url(#dots)" opacity="0.3" />
+
+    <!-- Abstract student group: three figures -->
+    <!-- Figure 1 -->
+    <g transform="translate(160,330)">
+      <circle cx="0" cy="-80" r="36" fill="#ffffff" opacity="0.9" />
+      <rect x="-40" y="-40" width="80" height="110" rx="18" fill="#ffffff" opacity="0.8" />
+      <rect x="-70" y="60" width="140" height="18" rx="9" fill="#ffffff" opacity="0.5" />
+    </g>
+
+    <!-- Figure 2 (center, primary accent) -->
+    <g transform="translate(450,300)">
+      <circle cx="0" cy="-90" r="42" fill="url(#accent)" />
+      <rect x="-52" y="-45" width="104" height="140" rx="22" fill="#ffffff" opacity="0.92" />
+      <rect x="-82" y="80" width="164" height="20" rx="10" fill="url(#accent)" opacity="0.6" />
+    </g>
+
+    <!-- Figure 3 -->
+    <g transform="translate(720,340)">
+      <circle cx="0" cy="-80" r="36" fill="#ffffff" opacity="0.9" />
+      <rect x="-40" y="-40" width="80" height="110" rx="18" fill="#ffffff" opacity="0.8" />
+      <rect x="-70" y="60" width="140" height="18" rx="9" fill="#ffffff" opacity="0.5" />
+    </g>
+
+    <!-- Collaboration board / laptop abstract -->
+    <g transform="translate(300,180)" filter="url(#softGlow)">
+      <rect x="0" y="0" width="300" height="180" rx="18" fill="#ffffff" opacity="0.95" />
+      <rect x="18" y="24" width="120" height="18" rx="9" fill="url(#accent)" opacity="0.8" />
+      <rect x="18" y="56" width="264" height="12" rx="6" fill="#e5e7eb" />
+      <rect x="18" y="80" width="220" height="12" rx="6" fill="#e5e7eb" />
+      <rect x="18" y="104" width="180" height="12" rx="6" fill="#e5e7eb" />
+      <rect x="18" y="140" width="90" height="24" rx="12" fill="url(#accent)" opacity="0.9" />
+    </g>
+
+    <!-- Accent lines -->
+    <path d="M60 520 C 200 480, 300 540, 420 500 S 660 520, 840 500" stroke="rgba(255,255,255,0.6)" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M80 120 C 200 80, 380 140, 520 120 S 740 140, 820 100" stroke="rgba(255,255,255,0.4)" stroke-width="4" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- Framing border -->
+  <rect x="8" y="8" width="884" height="584" rx="20" ry="20" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" />
+</svg>
