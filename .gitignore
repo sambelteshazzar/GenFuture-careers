@@ -42,3 +42,6 @@ genfuture.db
 
 # Ignore any git submodule like directories that are not meant to be tracked
 https:/
+
+# Local logs for automated workspace tasks
+.gitlogs/
