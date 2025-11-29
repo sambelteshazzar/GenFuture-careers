@@ -4,7 +4,7 @@ import AuthPage from './pages/AuthPage';
 import CareerExplorerPage from './pages/CareerExplorerPage';
 import AboutPage from './pages/AboutPage';
 import StaticContentPage from './pages/StaticContentPage';
-import { getCurrentUser } from './services/api';
+import { supabase } from './services/supabase';
 import './App.css';
 import DashboardPage from './pages/DashboardPage';
 
@@ -15,21 +15,28 @@ function App() {
   const [staticSlug, setStaticSlug] = useState('');
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('genFutureToken');
-      if (token) {
-        try {
-          const response = await getCurrentUser();
-          setUser(response.data);
-          setCurrentView('dashboard');
-        } catch (_error) {
-          localStorage.removeItem('genFutureToken');
-        }
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+        setCurrentView('dashboard');
       }
       setIsLoading(false);
     };
 
-    fetchUser();
+    checkUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        setCurrentView('dashboard');
+      } else {
+        setUser(null);
+        setCurrentView('landing');
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Hash-based lightweight routing for static pages (About, Legal, Resources, etc.)
@@ -79,23 +86,17 @@ function App() {
     setCurrentView('auth');
   };
 
-  const handleAuth = () => {
-    const fetchUser = async () => {
-      try {
-        const response = await getCurrentUser();
-        setUser(response.data);
-        setCurrentView('dashboard');
-      } catch {
-        // Handle error if needed
-      }
-    };
-
-    fetchUser();
+  const handleAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      setUser(session.user);
+      setCurrentView('dashboard');
+    }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('genFutureToken');
     setCurrentView('landing');
   };
 

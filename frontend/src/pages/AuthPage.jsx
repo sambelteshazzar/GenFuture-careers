@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AuthPage.css';
-import { login, register } from '../services/api';
+import { supabase } from '../services/supabase';
 
 const AuthPage = ({ onAuth, initialMode = 'login' }) => {
   const [mode, setMode] = useState(initialMode === 'register' ? 'signup' : 'login');
@@ -57,15 +57,6 @@ const AuthPage = ({ onAuth, initialMode = 'login' }) => {
     e.preventDefault();
     setErrors({});
     setIsLoading(true);
-    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-      console.info('[Auth] submit', {
-        mode,
-        email: (formData?.email || '').trim(),
-        hasPassword: !!formData?.password,
-        hasConfirm: !!formData?.confirmPassword,
-        hasNames: !!formData?.firstName && !!formData?.lastName
-      });
-    }
 
     const newErrors = {};
     const emailErr = validateEmail(formData.email);
@@ -86,85 +77,52 @@ const AuthPage = ({ onAuth, initialMode = 'login' }) => {
     }
 
     try {
-      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-        console.info('[Auth] submitting flow', mode);
-      }
       if (mode === 'login') {
-        const response = await login(formData.email.trim(), formData.password);
-        localStorage.setItem('genFutureToken', response.data.access_token);
-        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-          console.info('[Auth] login ok', { email: formData.email.trim(), token: !!response.data?.access_token });
-        }
-        onAuth && onAuth(response.data);
-      } else {
-        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-          console.info('[Auth] register request', {
-            email: formData.email.trim(),
-            firstName: formData.firstName.trim(),
-            lastName: formData.lastName.trim()
-          });
-        }
-        await register({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email: formData.email.trim(),
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
           password: formData.password,
         });
-        const response = await login(formData.email.trim(), formData.password);
-        localStorage.setItem('genFutureToken', response.data.access_token);
-        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-          console.info('[Auth] register+login ok', { email: formData.email.trim(), token: !!response.data?.access_token });
-        }
-        onAuth && onAuth(response.data);
+
+        if (error) throw error;
+
+        onAuth && onAuth();
+      } else {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email.trim(),
+          password: formData.password,
+          options: {
+            data: {
+              first_name: formData.firstName.trim(),
+              last_name: formData.lastName.trim(),
+            }
+          }
+        });
+
+        if (error) throw error;
+
+        onAuth && onAuth();
       }
     } catch (error) {
-      const status = error?.response?.status;
-      const data = error?.response?.data;
-      const detail = data?.detail;
-
-      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-        console.error('[Auth] flow failed', { status, data, message: error?.message });
-      }
-
-      // UX improvement: if signup fails because the email is already registered,
-      // automatically attempt a login with the provided credentials.
-      if (
-        mode === 'signup' &&
-        status === 400 &&
-        (detail === 'Email already registered' || (typeof detail === 'string' && /already registered/i.test(detail)))
-      ) {
+      if (mode === 'signup' && error.message?.includes('already registered')) {
         try {
-          if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-            console.info('[Auth] user exists, attempting login');
-          }
-          const response = await login(formData.email.trim(), formData.password);
-          localStorage.setItem('genFutureToken', response.data.access_token);
-          if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-            console.info('[Auth] auto-login ok', { email: formData.email.trim(), token: !!response.data?.access_token });
-          }
-          onAuth && onAuth(response.data);
+          const { data, error: loginError } = await supabase.auth.signInWithPassword({
+            email: formData.email.trim(),
+            password: formData.password,
+          });
+
+          if (loginError) throw loginError;
+
+          onAuth && onAuth();
           return;
         } catch (loginErr) {
-          const apiError = loginErr?.response?.data?.detail || 'Login failed after registration attempt.';
-          setErrors({ api: apiError });
+          setErrors({ api: 'Login failed after registration attempt.' });
           return;
         }
       }
 
-      const fallbackMsg = 'Incorrect email or password. Sign up to create an account or use the demo account.';
-      let apiError;
-      if (!error?.response) {
-        apiError = 'Network error. Ensure the backend is running at http://localhost:8000 and CORS allows http://localhost:5173.';
-      } else if (status === 401) {
-        apiError = fallbackMsg;
-      } else if (status === 422) {
-        apiError = 'Invalid input. Please check your email and password format.';
-      } else if (status === 404) {
-        apiError = 'Authentication endpoint not found. Verify API base URL configuration.';
-      } else if (status >= 500) {
-        apiError = 'Server error. Please try again.';
-      } else {
-        apiError = detail || 'An unexpected error occurred.';
+      let apiError = error.message || 'An unexpected error occurred.';
+      if (error.message?.includes('Invalid login credentials')) {
+        apiError = 'Incorrect email or password. Sign up to create an account.';
       }
       setErrors({ api: apiError });
     } finally {
@@ -189,59 +147,36 @@ const AuthPage = ({ onAuth, initialMode = 'login' }) => {
       setIsLoading(true);
       const demoEmail = 'demo@genfuture.com';
       const demoPassword = 'password123';
-      const response = await login(demoEmail, demoPassword);
-      localStorage.setItem('genFutureToken', response.data.access_token);
-      onAuth && onAuth(response.data);
-    } catch (error) {
-      const status = error?.response?.status;
-      const data = error?.response?.data;
-      const detail = data?.detail;
 
-      if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-        console.error('[Auth] flow failed', { status, data, message: error?.message });
-      }
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: demoEmail,
+        password: demoPassword,
+      });
 
-      // UX improvement: if signup fails because the email is already registered,
-      // automatically attempt a login with the provided credentials.
-      if (
-        mode === 'signup' &&
-        status === 400 &&
-        (detail === 'Email already registered' || (typeof detail === 'string' && /already registered/i.test(detail)))
-      ) {
-        try {
-          if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-            console.info('[Auth] user exists, attempting login');
+      if (error) {
+        if (error.message?.includes('Invalid login credentials')) {
+          const { error: signUpError } = await supabase.auth.signUp({
+            email: demoEmail,
+            password: demoPassword,
+            options: {
+              data: {
+                first_name: 'Demo',
+                last_name: 'User',
+              }
+            }
+          });
+
+          if (!signUpError) {
+            onAuth && onAuth();
+            return;
           }
-          const response = await login(formData.email.trim(), formData.password);
-          localStorage.setItem('genFutureToken', response.data.access_token);
-          if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV) {
-            console.info('[Auth] auto-login ok', { email: formData.email.trim(), token: !!response.data?.access_token });
-          }
-          onAuth && onAuth(response.data);
-          return;
-        } catch (loginErr) {
-          const apiError = loginErr?.response?.data?.detail || 'Login failed after registration attempt.';
-          setErrors({ api: apiError });
-          return;
         }
+        throw error;
       }
 
-      const fallbackMsg = 'Incorrect email or password. Sign up to create an account or use the demo account.';
-      let apiError;
-      if (!error?.response) {
-        apiError = 'Network error. Ensure the backend is running at http://localhost:8000 and CORS allows http://localhost:5173.';
-      } else if (status === 401) {
-        apiError = fallbackMsg;
-      } else if (status === 422) {
-        apiError = 'Invalid input. Please check your email and password format.';
-      } else if (status === 404) {
-        apiError = 'Authentication endpoint not found. Verify API base URL configuration.';
-      } else if (status >= 500) {
-        apiError = 'Server error. Please try again.';
-      } else {
-        apiError = detail || 'An unexpected error occurred.';
-      }
-      setErrors({ api: apiError });
+      onAuth && onAuth();
+    } catch (error) {
+      setErrors({ api: error.message || 'Demo login failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }
