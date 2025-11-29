@@ -1,6 +1,7 @@
 import React from 'react';
+import BookmarkButton from './BookmarkButton';
 
-const CourseList = ({ courses, onSelect, isLoading }) => {
+const CourseList = ({ courses, onSelect, isLoading, userId }) => {
   // Loading skeletons
   if (isLoading) {
     const placeholders = Array.from({ length: 8 }, (_, i) => i);
@@ -106,7 +107,17 @@ const CourseList = ({ courses, onSelect, isLoading }) => {
             role="button"
             tabIndex={0}
           >
-            <div className="course-icon">📖</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div className="course-icon">📖</div>
+              {userId && (
+                <BookmarkButton
+                  userId={userId}
+                  itemType="course"
+                  itemId={course.id}
+                  itemName={course.name}
+                />
+              )}
+            </div>
             <h3 className="course-name">{course.name}</h3>
             <div className="course-description">
               <p>Discover career opportunities in {String(course.name || '').toLowerCase()}</p>

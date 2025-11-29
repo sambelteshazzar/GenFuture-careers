@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
+import BookmarkButton from './BookmarkButton';
 
-const CareerPathsList = ({ careerPaths, onLearnMore }) => {
+const CareerPathsList = ({ careerPaths, onLearnMore, userId }) => {
   // Scoped styles for meta sections
   useEffect(() => {
     const styleId = 'career-meta-styles';
@@ -221,7 +222,17 @@ const CareerPathsList = ({ careerPaths, onLearnMore }) => {
           const description = String(career?.description || `A rewarding career path in ${String(career?.name || '').toLowerCase()}`);
           return (
             <div key={career.id} className="career-card" role="listitem">
-              <div className="career-icon" aria-hidden="true">🚀</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                <div className="career-icon" aria-hidden="true">🚀</div>
+                {userId && (
+                  <BookmarkButton
+                    userId={userId}
+                    itemType="career_path"
+                    itemId={career.id}
+                    itemName={career.name}
+                  />
+                )}
+              </div>
               <h3 className="career-title">{career.name}</h3>
               <div className="career-description">
                 <p>{description}</p>

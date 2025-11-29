@@ -1,6 +1,7 @@
 import React from 'react';
+import BookmarkButton from './BookmarkButton';
 
-const UniversityList = ({ universities, onSelect, isLoading, canPrev, canNext, onPrevPage, onNextPage }) => {
+const UniversityList = ({ universities, onSelect, isLoading, canPrev, canNext, onPrevPage, onNextPage, userId }) => {
   // Loading skeletons for universities grid
   if (isLoading) {
     const placeholders = Array.from({ length: 8 }, (_, i) => i);
@@ -112,7 +113,17 @@ const UniversityList = ({ universities, onSelect, isLoading, canPrev, canNext, o
               aria-disabled={!selectable}
               tabIndex={selectable ? 0 : -1}
             >
-              <div className="university-icon">🏛️</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div className="university-icon">🏛️</div>
+                {userId && (
+                  <BookmarkButton
+                    userId={userId}
+                    itemType="university"
+                    itemId={uni.id}
+                    itemName={uni.name}
+                  />
+                )}
+              </div>
               <h3 className="university-name">
                 {uni.name}
                 {!selectable && (

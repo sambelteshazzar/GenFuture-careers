@@ -48,5 +48,25 @@ h1 {
     }
 }
 
+/* Bookmark button styles */
+.bookmark-btn {
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.bookmark-btn:hover {
+    background: rgba(250, 204, 21, 0.1);
+    transform: scale(1.1);
+}
 
+.bookmark-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

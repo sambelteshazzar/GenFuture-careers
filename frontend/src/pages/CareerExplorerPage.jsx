@@ -317,6 +317,7 @@ const CareerExplorerPage = ({ user, onLogout }) => {
                     canNext={Array.isArray(universities) && universities.length >= limit}
                     onPrevPage={() => { if (offset <= 0) return; setIsLoading(true); setOffset(Math.max(0, offset - limit)); }}
                     onNextPage={() => { setIsLoading(true); setOffset(offset + limit); }}
+                    userId={user?.id}
                   />
                 </motion.section>
               )}
@@ -336,10 +337,11 @@ const CareerExplorerPage = ({ user, onLogout }) => {
                     <h2>📚 Available Courses</h2>
                     <p>Choose a course to discover related career paths and opportunities</p>
                   </div>
-                  <CourseList 
-                    courses={courses} 
+                  <CourseList
+                    courses={courses}
                     onSelect={handleCourseSelect}
                     isLoading={isLoading}
+                    userId={user?.id}
                   />
                 </motion.section>
               )}
@@ -359,9 +361,10 @@ const CareerExplorerPage = ({ user, onLogout }) => {
                     <h2>🚀 Your Future Career Paths</h2>
                     <p>Explore exciting career opportunities and plan your professional journey</p>
                   </div>
-                  <CareerPathsList 
+                  <CareerPathsList
                     careerPaths={careerPaths}
                     isLoading={isLoading}
+                    userId={user?.id}
                   />
                 </motion.section>
               )}

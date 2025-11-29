@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
+import BookmarksPanel from '../components/BookmarksPanel';
+import ApplicationTracker from '../components/ApplicationTracker';
 
 const DashboardPage = ({ user, onLogout, onGoToExplorer }) => {
+  const [activeTab, setActiveTab] = useState('overview');
   // Scoped CSS injection (keeps changes minimal and aligned to existing tokens)
   useEffect(() => {
     const styleId = 'dashboard-styles';
@@ -224,6 +227,64 @@ const DashboardPage = ({ user, onLogout, onGoToExplorer }) => {
       <Header user={user} onLogout={onLogout} onProfileClick={() => {}} />
 
       <main className="dashboard-container">
+        <div style={{ marginBottom: '2rem', borderBottom: '2px solid #e5e7eb', display: 'flex', gap: '1rem' }}>
+          <button
+            onClick={() => setActiveTab('overview')}
+            style={{
+              padding: '1rem 1.5rem',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'overview' ? '3px solid #3b82f6' : 'none',
+              color: activeTab === 'overview' ? '#3b82f6' : '#6b7280',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontSize: '1rem',
+            }}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('bookmarks')}
+            style={{
+              padding: '1rem 1.5rem',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'bookmarks' ? '3px solid #3b82f6' : 'none',
+              color: activeTab === 'bookmarks' ? '#3b82f6' : '#6b7280',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontSize: '1rem',
+            }}
+          >
+            Bookmarks
+          </button>
+          <button
+            onClick={() => setActiveTab('applications')}
+            style={{
+              padding: '1rem 1.5rem',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'applications' ? '3px solid #3b82f6' : 'none',
+              color: activeTab === 'applications' ? '#3b82f6' : '#6b7280',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontSize: '1rem',
+            }}
+          >
+            Applications
+          </button>
+        </div>
+
+        {activeTab === 'bookmarks' && (
+          <BookmarksPanel userId={user?.id} onItemClick={(bookmark) => console.log('Bookmark clicked:', bookmark)} />
+        )}
+
+        {activeTab === 'applications' && (
+          <ApplicationTracker userId={user?.id} />
+        )}
+
+        {activeTab === 'overview' && (
+          <>
         {/* Top overview row */}
         <div className="grid">
           {/* Welcome / achievement card */}
@@ -372,6 +433,8 @@ const DashboardPage = ({ user, onLogout, onGoToExplorer }) => {
             <button className="primary-cta" onClick={onGoToExplorer}>Go to Explorer</button>
           </motion.section>
         </div>
+          </>
+        )}
       </main>
     </div>
   );
