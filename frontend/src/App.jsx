@@ -106,7 +106,7 @@ function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)'
       }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
           <div style={{
