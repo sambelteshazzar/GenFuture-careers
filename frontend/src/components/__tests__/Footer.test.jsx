@@ -6,9 +6,9 @@ describe('Footer', () => {
   it('renders trademark & links', () => {
     render(<Footer />)
 
-    expect(screen.getByText(/GenFuture/i)).toBeInTheDocument()
-    // footer should contain link to privacy/about via hash
-    const about = screen.getByText(/about/i)
+    // ensure the legal/trademark text exists and an about/privacy link is present
+    expect(screen.getByText(/All rights reserved/i)).toBeInTheDocument()
+    const about = screen.getByText(/About/i)
     expect(about).toBeInTheDocument()
   })
 })
