@@ -45,3 +45,4 @@ https:/
 
 # Local logs for automated workspace tasks
 .gitlogs/
+artifacts/cleanups/
