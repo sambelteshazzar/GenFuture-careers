@@ -1,0 +1,12 @@
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+genfuture.db
+*.sqlite3
+.git
+.gitignore
+.gitlogs
+node_modules

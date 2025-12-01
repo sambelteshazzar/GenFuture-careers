@@ -83,6 +83,36 @@ cd /home/belteshazzarkijin/GenFuture-careers/frontend
 ```
 - Frontend App: http://localhost:5173
 
+### Run with Docker (recommended for parity)
+
+Use Docker to build images and run the backend + frontend together. Copy `.env.example` to `.env` and update any secrets first.
+
+```bash
+# Build and start both services (backend=8000, frontend served by nginx mapped to 5173)
+docker compose up --build
+
+# Stop and remove containers
+docker compose down
+```
+
+Notes:
+- Backend is available at http://localhost:8000
+- Frontend is served via nginx in the container and exposed on http://localhost:5173 (mapped to nginx:80 inside the container)
+
+### Run backend tests locally
+
+Run the backend's pytest test-suite from the `backend/` folder. The tests set up an isolated temporary sqlite DB and will not modify your local data file.
+
+```bash
+cd backend
+python3 -m venv .venv    # optional
+.venv/bin/activate
+pip install -r requirements.txt
+pip install pytest
+pytest -q
+```
+
+
 ---
 
 ## 🎯 **User Journey**

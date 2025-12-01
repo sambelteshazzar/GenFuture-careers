@@ -1,0 +1,21 @@
+name: Docker - build images
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: |
+          docker build -t genfuture-backend:ci ./backend
+
+      - name: Build frontend image
+        run: |
+          docker build -t genfuture-frontend:ci ./frontend
