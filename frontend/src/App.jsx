@@ -16,8 +16,17 @@ function App() {
 
   useEffect(() => {
     const checkUser = async () => {
+      // Set a maximum timeout for loading
+      const timeoutId = setTimeout(() => {
+        console.log('Auth check timed out after 2 seconds');
+        setIsLoading(false);
+      }, 2000);
+
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error('Auth error:', error);
+        }
         if (session?.user) {
           setUser(session.user);
           setCurrentView('dashboard');
@@ -25,6 +34,7 @@ function App() {
       } catch (error) {
         console.error('Auth check failed:', error);
       } finally {
+        clearTimeout(timeoutId);
         setIsLoading(false);
       }
     };
