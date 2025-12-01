@@ -62,7 +62,14 @@ jobs:
           npm ci || npm install
           npm run lint || true
           npm run test:ci || true
+          npm run test:coverage || true
           npm run build || true
+
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/**
 
       - name: Run quick smoke checks
         run: |
