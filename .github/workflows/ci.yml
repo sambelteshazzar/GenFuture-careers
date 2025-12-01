@@ -71,6 +71,28 @@ jobs:
           name: frontend-coverage
           path: frontend/coverage/**
 
+      - name: Enforce frontend coverage threshold
+        if: always()
+        run: |
+          python - <<'PY'
+import json,sys
+p=60.0
+try:
+    with open('frontend/coverage/coverage-summary.json') as f:
+        data=json.load(f)
+        pct = data['total']['lines']['pct']
+        print(f"Frontend coverage lines: {pct}%")
+        if pct < p:
+            print(f"Coverage check failed: {pct}% < {p}%")
+            sys.exit(1)
+        else:
+            print('Coverage OK')
+except FileNotFoundError:
+    print('No coverage summary found; skipping enforcement')
+    # don't fail if no coverage file produced
+    sys.exit(0)
+PY
+
       - name: Run quick smoke checks
         run: |
           echo "frontend build completed"
