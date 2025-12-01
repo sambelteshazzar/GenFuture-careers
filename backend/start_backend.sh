@@ -35,6 +35,14 @@ else
     echo "✅ [DEBUG] Database exists"
 fi
 
+# Ensure SECRET_KEY is set for development runs; do not use this in production
+if [ -z "$SECRET_KEY" ]; then
+    export SECRET_KEY="dev-secret-please-set"
+    echo "⚠️ [WARN] SECRET_KEY not set; using development default. Set SECRET_KEY in environment for production."
+else
+    echo "🔒 [DEBUG] SECRET_KEY is set from environment"
+fi
+
 # Run the FastAPI server
 echo "🚀 [DEBUG] Starting FastAPI server..."
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000

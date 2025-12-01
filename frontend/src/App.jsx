@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import LandingPage from './pages/LandingPage';
-import AuthPage from './pages/AuthPage';
-import CareerExplorerPage from './pages/CareerExplorerPage';
-import AboutPage from './pages/AboutPage';
-import StaticContentPage from './pages/StaticContentPage';
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const CareerExplorerPage = lazy(() => import('./pages/CareerExplorerPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const StaticContentPage = lazy(() => import('./pages/StaticContentPage'));
 import { getCurrentUser } from './services/api';
 import './App.css';
 import DashboardPage from './pages/DashboardPage';
@@ -133,44 +133,46 @@ function App() {
 
   return (
     <div className="App">
-      {currentView === 'landing' && (
-        <LandingPage onGetStarted={handleGetStarted} />
-      )}
+      <Suspense fallback={<div style={{padding:32,textAlign:'center'}}>Loading…</div>}>
+        {currentView === 'landing' && (
+          <LandingPage onGetStarted={handleGetStarted} />
+        )}
 
-      {currentView === 'auth' && (
-        <AuthPage onAuth={handleAuth} initialMode="register" />
-      )}
+        {currentView === 'auth' && (
+          <AuthPage onAuth={handleAuth} initialMode="register" />
+        )}
 
-      {currentView === 'dashboard' && user && (
-        <DashboardPage user={user} onLogout={handleLogout} onGoToExplorer={() => setCurrentView('app')} />
-      )}
+        {currentView === 'dashboard' && user && (
+          <DashboardPage user={user} onLogout={handleLogout} onGoToExplorer={() => setCurrentView('app')} />
+        )}
 
-      {currentView === 'app' && user && (
-        <CareerExplorerPage user={user} onLogout={handleLogout} />
-      )}
+        {currentView === 'app' && user && (
+          <CareerExplorerPage user={user} onLogout={handleLogout} />
+        )}
 
-      {currentView === 'about' && (
-        <AboutPage
-          onBack={() => {
-            const target = user ? 'dashboard' : 'landing';
-            setCurrentView(target);
-            try { window.history.back(); } catch {}
-            window.location.hash = '';
-          }}
-        />
-      )}
+        {currentView === 'about' && (
+          <AboutPage
+            onBack={() => {
+              const target = user ? 'dashboard' : 'landing';
+              setCurrentView(target);
+              try { window.history.back(); } catch {}
+              window.location.hash = '';
+            }}
+          />
+        )}
 
-      {currentView === 'static' && (
-        <StaticContentPage
-          slug={staticSlug}
-          onBack={() => {
-            const target = user ? 'dashboard' : 'landing';
-            setCurrentView(target);
-            try { window.history.back(); } catch {}
-            window.location.hash = '';
-          }}
-        />
-      )}
+        {currentView === 'static' && (
+          <StaticContentPage
+            slug={staticSlug}
+            onBack={() => {
+              const target = user ? 'dashboard' : 'landing';
+              setCurrentView(target);
+              try { window.history.back(); } catch {}
+              window.location.hash = '';
+            }}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

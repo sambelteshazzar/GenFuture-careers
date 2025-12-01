@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+// framer-motion is only needed for animated entrances. We dynamically import
+// it so the initial bundle doesn't include the entire library.
+// This makes the initial JS smaller and improves first paint/LCP.
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Footer from '../components/Footer';
 
@@ -15,19 +17,20 @@ const NAV_LINKS = ['About'];
 
 const LandingPage = ({ onGetStarted }) => {
   const safeNavigate = typeof onGetStarted === 'function' ? onGetStarted : () => {};
+  const [Motion, setMotion] = useState(null);
 
-  // Inject Google font and scoped CSS once to avoid touching global files
   useEffect(() => {
-    const fontId = 'advior-font-playfair';
-    if (!document.getElementById(fontId)) {
-      const link = document.createElement('link');
-      link.id = fontId;
-      link.rel = 'stylesheet';
-      link.href =
-        'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&display=swap';
-      document.head.appendChild(link);
-    }
+    let mounted = true;
+    import('framer-motion').then((mod) => {
+      if (mounted && mod && mod.motion) setMotion(() => mod.motion);
+    }).catch(() => {
+      // ignore - animations are optional
+    });
+    return () => { mounted = false };
+  }, []);
 
+  // Inject scoped CSS once to avoid touching global files
+  useEffect(() => {
     const styleId = 'advior-landing-styles';
     if (!document.getElementById(styleId)) {
       const style = document.createElement('style');
@@ -308,53 +311,97 @@ const LandingPage = ({ onGetStarted }) => {
       {/* Hero */}
       <section className="advior-hero" role="banner">
         <div className="advior-hero-content">
-          <motion.div
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="advior-tag">Top Feature</span>
-            <h2 className="advior-title">We Provide Intelligent Career Planning.</h2>
-            <p className="advior-sub">
-              Explore career paths, compare universities and programs, and plan the skills to reach your goals with clarity and confidence.
-            </p>
+          {Motion ? (
+            <Motion.div
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="advior-tag">Top Feature</span>
+              <h2 className="advior-title">We Provide Intelligent Career Planning.</h2>
+              <p className="advior-sub">
+                Explore career paths, compare universities and programs, and plan the skills to reach your goals with clarity and confidence.
+              </p>
 
-            <div className="advior-btns">
-              <button
-                className="advior-btn primary"
-                onClick={safeNavigate}
-                aria-label="Start Career Assessment"
-              >
-                Start Career Assessment
-                <ArrowUpRightIcon className="icon" aria-hidden="true" />
-              </button>
-              <button
-                className="advior-btn outline"
-                onClick={() => {
-                  try {
-                    document
-                      .getElementById('universities')
-                      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  } catch {
-                    window.location.hash = '#universities';
-                  }
-                }}
-                aria-label="Explore Universities"
-              >
-                Explore Universities
-              </button>
+              <div className="advior-btns">
+                <button
+                  className="advior-btn primary"
+                  onClick={safeNavigate}
+                  aria-label="Start Career Assessment"
+                >
+                  Start Career Assessment
+                  <ArrowUpRightIcon className="icon" aria-hidden="true" />
+                </button>
+                <button
+                  className="advior-btn outline"
+                  onClick={() => {
+                    try {
+                      document
+                        .getElementById('universities')
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } catch {
+                      window.location.hash = '#universities';
+                    }
+                  }}
+                  aria-label="Explore Universities"
+                >
+                  Explore Universities
+                </button>
+              </div>
+            </Motion.div>
+          ) : (
+            <div>
+              <span className="advior-tag">Top Feature</span>
+              <h2 className="advior-title">We Provide Intelligent Career Planning.</h2>
+              <p className="advior-sub">
+                Explore career paths, compare universities and programs, and plan the skills to reach your goals with clarity and confidence.
+              </p>
+
+              <div className="advior-btns">
+                <button
+                  className="advior-btn primary"
+                  onClick={safeNavigate}
+                  aria-label="Start Career Assessment"
+                >
+                  Start Career Assessment
+                  <ArrowUpRightIcon className="icon" aria-hidden="true" />
+                </button>
+                <button
+                  className="advior-btn outline"
+                  onClick={() => {
+                    try {
+                      document
+                        .getElementById('universities')
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } catch {
+                      window.location.hash = '#universities';
+                    }
+                  }}
+                  aria-label="Explore Universities"
+                >
+                  Explore Universities
+                </button>
+              </div>
             </div>
-          </motion.div>
+          )}
 
-          <motion.div
-            initial={{ opacity: 0, x: 26 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-          >
-            <h1 className="advior-display">
-              The Future<br />Of Career Planning
-            </h1>
-          </motion.div>
+          {Motion ? (
+            <Motion.div
+              initial={{ opacity: 0, x: 26 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+            >
+              <h1 className="advior-display">
+                The Future<br />Of Career Planning
+              </h1>
+            </Motion.div>
+          ) : (
+            <div>
+              <h1 className="advior-display">
+                The Future<br />Of Career Planning
+              </h1>
+            </div>
+          )}
         </div>
 
         {/* Optional trusted chips below hero */}
