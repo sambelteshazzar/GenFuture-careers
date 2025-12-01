@@ -35,12 +35,26 @@ else
     echo "✅ [DEBUG] Database exists"
 fi
 
-# Ensure SECRET_KEY is set for development runs; do not use this in production
-if [ -z "$SECRET_KEY" ]; then
-    export SECRET_KEY="dev-secret-please-set"
-    echo "⚠️ [WARN] SECRET_KEY not set; using development default. Set SECRET_KEY in environment for production."
+# Enforce SECRET_KEY in non-development environments
+ENVIRONMENT=${ENVIRONMENT:-development}
+if [ "$ENVIRONMENT" = "development" ]; then
+    if [ -z "$SECRET_KEY" ]; then
+        export SECRET_KEY="dev-secret-please-set"
+        echo "⚠️ [WARN] SECRET_KEY not set; using development default."
+    else
+        echo "🔒 [DEBUG] SECRET_KEY is set from environment (development)"
+    fi
 else
-    echo "🔒 [DEBUG] SECRET_KEY is set from environment"
+    if [ -z "$SECRET_KEY" ]; then
+        echo "🚫 [ERROR] SECRET_KEY must be set in production-like environments. Set SECRET_KEY and rerun." >&2
+        exit 1
+    else
+        echo "🔒 [DEBUG] SECRET_KEY is set from environment (production)"
+    fi
+    if [ -z "$DATABASE_URL" ]; then
+        echo "🚫 [ERROR] DATABASE_URL must be set in production-like environments. Set DATABASE_URL and rerun." >&2
+        exit 1
+    fi
 fi
 
 # Run the FastAPI server
