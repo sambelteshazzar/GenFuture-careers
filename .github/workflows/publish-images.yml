@@ -28,6 +28,12 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pytest -q
 
+      - name: Backend - validate migrations
+        working-directory: backend
+        run: |
+          python -m alembic upgrade head
+          python -m alembic current
+
       - name: Frontend - install deps & run tests
         working-directory: frontend
         run: |
