@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import List, Optional
 
 # Authentication Schemas
@@ -13,9 +13,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     is_active: bool = True
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
     access_token: str
@@ -37,9 +35,7 @@ class CareerPathCreate(CareerPathBase):
 class CareerPath(CareerPathBase):
     id: int
     course_id: int
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Course Schemas
 class CourseBase(BaseModel):
@@ -55,9 +51,7 @@ class Course(CourseBase):
     id: int
     university_id: int
     career_paths: List['CareerPath'] = []
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # University Schemas
 class UniversityBase(BaseModel):
@@ -76,9 +70,7 @@ class UniversityCreate(UniversityBase):
 class University(UniversityBase):
     id: int
     courses: List['Course'] = []
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Update forward references
 Course.model_rebuild()

@@ -1,7 +1,9 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    
     DATABASE_URL: str = "sqlite:///./genfuture.db"
     ONET_API_KEY: Optional[str] = None
     BLS_API_KEY: Optional[str] = None
@@ -17,9 +19,5 @@ class Settings(BaseSettings):
     # CORS and Host protection (comma-separated lists)
     CORS_ALLOW_ORIGINS: Optional[str] = None
     ALLOWED_HOSTS: Optional[str] = None
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
 
 settings = Settings()

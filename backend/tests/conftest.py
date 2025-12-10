@@ -4,14 +4,16 @@ import os
 import pytest
 
 
-@pytest.fixture(scope="session")
-def client(tmp_path, monkeypatch):
+@pytest.fixture(scope="function")
+def client(tmp_path_factory, monkeypatch):
     """Create a TestClient using a temporary sqlite DB so tests don't touch local files.
 
     We set DATABASE_URL before importing the app so the app's SQLAlchemy engine
     uses the test DB. Then we reload modules to ensure engine is recreated.
     """
-    db_file = tmp_path / "test.db"
+    # tmp_path_factory provides a session-scoped temporary directory
+    db_dir = tmp_path_factory.mktemp("test_db")
+    db_file = db_dir / "test.db"
     monkeypatch.setenv("DATABASE_URL", f"sqlite:///{db_file}")
 
     # reload modules so they pick up the test DATABASE_URL
